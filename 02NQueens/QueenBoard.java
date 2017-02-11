@@ -43,7 +43,7 @@ public class QueenBoard {
     }
 
     private void addQueen(int row, int col) {
-	for (int i = 0; i < board.length; i ++) {
+	for (int i = 0; i < 1.5 * board.length; i ++) { // 1.5 because diagonals can be up to sqrt(2) * board.length
 	    try {
 		board[row + i][col] += 1;
 	    } catch (ArrayIndexOutOfBoundsException e) {
@@ -96,7 +96,7 @@ public class QueenBoard {
     }
 
     private void removeQueen(int row, int col) {
-	for (int i = 0; i < board.length; i ++) {
+	for (int i = 0; i < 1.5 * board.length; i ++) {
 	    try {
 		board[row + i][col] -= 1;
 	    } catch (ArrayIndexOutOfBoundsException e) {
