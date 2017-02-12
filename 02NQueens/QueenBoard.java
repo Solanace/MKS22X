@@ -8,20 +8,26 @@ public class QueenBoard {
 	}
 	board = new int[size][size];
 	solution = new int[size][size];
-	solution[0][0] = -1; // Used to check if solution was filled later
+	solution[0][0] = -2; // Used to check if solution was filled later
 	solutionCount = -1;
     }
 
-    public boolean solve() {
-	solutionCount = 0;
-	return solveH(0);
+    public void solve() {
+        int s = solutionCount;
+        solveH(0);
+	solutionCount = s;
     }
+
+    public void countSolutions() {
+	solutionCount = 0;
+	solveH(0);
+    }	
 
     private boolean solveH(int col) {
 	boolean solutionFound = false;
 	if (col + 1 > board.length) {
 	    solutionCount += 1;
-	    if (solution[0][0] == -1) {
+	    if (solution[0][0] == -2) {
 		for (int r = 0; r < board.length; r ++) {
 		    for (int c = 0; c < board[r].length; c ++) {
 			solution[r][c] = board[r][c];
@@ -148,7 +154,7 @@ public class QueenBoard {
 
     public String toString() {
 	String s = "";
-	if (solutionCount > 0) {
+	if (solution[0][0] > -2) {
 	    for (int r = 0; r < solution.length; r ++) {
 		for (int c = 0; c < solution[r].length; c ++) {
 		    if (solution[r][c] == -1) {
@@ -176,8 +182,11 @@ public class QueenBoard {
     public static void main(String[] args) {
         for (int i = 1; i < 11; i ++) {
 	    QueenBoard Penn = new QueenBoard(i);
+	    System.out.println("" + i + "x" + i + " queens");
 	    Penn.solve();
-	    System.out.println(Penn.getSolutionCount());
+	    Penn.countSolutions();
+	    System.out.println(Penn.getSolutionCount() + " solutions");
+	    System.out.println();
 	    System.out.println(Penn);
 	}
     }
