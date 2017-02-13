@@ -19,8 +19,11 @@ public class QueenBoard {
     }
 
     public void countSolutions() {
+	int temp = solution[0][0];
+	solution[0][0] = -3;
 	solutionCount = 0;
 	solveH(0);
+	solution[0][0] = temp;
     }	
 
     private boolean solveH(int col) {
@@ -148,7 +151,7 @@ public class QueenBoard {
     }
 	
 
-    public int getSolutionCount() {
+    public int getCount() {
 	return solutionCount;
     }
 
@@ -182,10 +185,10 @@ public class QueenBoard {
     public static void main(String[] args) {
         for (int i = 1; i < 11; i ++) {
 	    QueenBoard Penn = new QueenBoard(i);
-	    System.out.println("" + i + "x" + i + " queens");
+	    System.out.println("" + i + " queens");
 	    Penn.solve();
 	    Penn.countSolutions();
-	    System.out.println(Penn.getSolutionCount() + " solutions");
+	    System.out.println(Penn.getCount() + " solutions");
 	    System.out.println();
 	    System.out.println(Penn);
 	}
