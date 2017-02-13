@@ -158,7 +158,7 @@ public class QueenBoard {
     }
 	
 
-    public int getCount() {
+    public int getSolutionCount() {
 	return solutionCount;
     }
 
@@ -195,7 +195,7 @@ public class QueenBoard {
 	    System.out.println("" + i + " queens");
 	    Penn.solve();
 	    Penn.countSolutions();
-	    System.out.println(Penn.getCount() + " solutions");
+	    System.out.println(Penn.getSolutionCount() + " solutions");
 	    System.out.println();
 	    System.out.println(Penn);
 	}
