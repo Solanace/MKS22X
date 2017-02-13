@@ -8,33 +8,18 @@ public class QueenBoard {
 	}
 	board = new int[size][size];
 	solution = new int[size][size];
-	solution[0][0] = -2; // Used to check if solution was filled later
 	solutionCount = -1;
     }
 
     public void solve() {
-        int s = solutionCount;
         solveH(0);
-	solutionCount = s;
     }
 
-    public void countSolutions() {
-	int temp = solution[0][0];
-	solution[0][0] = -3;
-	solutionCount = 0;
-	solveH(0);
-	solution[0][0] = temp;
-    }	
-
     private boolean solveH(int col) {
-	boolean solutionFound = false;
 	if (col + 1 > board.length) {
-	    solutionCount += 1;
-	    if (solution[0][0] == -2) {
-		for (int r = 0; r < board.length; r ++) {
-		    for (int c = 0; c < board[r].length; c ++) {
-			solution[r][c] = board[r][c];
-		    }
+	    for (int r = 0; r < board.length; r ++) {
+		for (int c = 0; c < board[r].length; c ++) {
+		    solution[r][c] = board[r][c];
 		}
 	    }
 	    return true;
@@ -43,12 +28,34 @@ public class QueenBoard {
 	    if (board[row][col] == 0) {
 		addQueen(row, col);
 		if (solveH(col + 1)) {
-		    solutionFound = true;
+		    board = new int[board.length][board.length];
+		    return true;
 		}
 		removeQueen(row, col);
 	    }
 	}
-	return solutionFound;
+	return false;
+    }
+
+    public void countSolutions() {
+	solutionCount = 0;
+	countSolutionsH(0);
+    }
+    
+    private void countSolutionsH(int col) {
+	if (col + 1 > board.length) {
+	    solutionCount += 1;
+	}
+	for (int row = 0; row < board.length; row ++) {
+	    if (board[row][col] == 0) {
+		addQueen(row, col);
+		try {
+		    countSolutionsH(col + 1);
+		} catch (ArrayIndexOutOfBoundsException e) {
+		}
+		removeQueen(row, col);
+	    }
+	}
     }
 
     private void addQueen(int row, int col) {
