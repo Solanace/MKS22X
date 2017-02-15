@@ -11,7 +11,7 @@ public class KnightBoard {
     public void solve() {
 	for (int square = 0; square < board.length * board[0].length; square ++) {
 	    if (solveH(square / board.length, square % board.length, 1)) {
-		break; // Workaround, break statement only works for 1 loop and not nested
+		break; // workaround, break statement only works for 1 loop and not nested
 	    }
 	}
     }
@@ -25,55 +25,6 @@ public class KnightBoard {
 	}
 	if (board[row][col] == 0) {
 	    board[row][col] = level;
-	    /*try {
-		if (solveH(row - 1, col - 2, level + 1)) {
-		    return true;
-		}
-	    } catch (ArrayIndexOutOfBoundsException e) {
-	    }
-	    try {
-		if (solveH(row - 1, col + 2, level + 1)) {
-		    return true;
-		}
-	    } catch (ArrayIndexOutOfBoundsException e) {
-	    }
-	    try {
-		if (solveH(row + 1, col - 2, level + 1)) {
-		    return true;
-		}
-	    } catch (ArrayIndexOutOfBoundsException e) {
-	    }
-	    try {
-		if (solveH(row + 1, col + 2, level + 1)) {
-		    return true;
-		}
-	    } catch (ArrayIndexOutOfBoundsException e) {
-	    }
-	    try {
-		if (solveH(row - 2, col - 1, level + 1)) {
-		    return true;
-		}
-	    } catch (ArrayIndexOutOfBoundsException e) {
-	    }
-	    try {
-		if (solveH(row - 2, col + 1, level + 1)) {
-		    return true;
-		}
-	    } catch (ArrayIndexOutOfBoundsException e) {
-	    }
-	    try {
-		if (solveH(row + 2, col - 1, level + 1)) {
-		    return true;
-		}
-	    } catch (ArrayIndexOutOfBoundsException e) {
-	    }
-	    try {
-		if (solveH(row + 2, col + 1, level + 1)) {
-		    return true;
-		}
-	    } catch (ArrayIndexOutOfBoundsException e) {
-	    }*/
-	    
 	    if (solveH(row - 2, col - 1, level + 1)) {
 		return true;
 	    }
