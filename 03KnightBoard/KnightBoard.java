@@ -40,9 +40,18 @@ public class KnightBoard {
     }
 
     public void solve() {
-	for (int square = 0; square < board.length * board[0].length; square ++) {
-	    if (otherSolveH(square / board.length, square % board.length, 1)) {
-		break; // workaround, break statement only works for 1 loop, not a nested pair
+	if (board.length < 5 || board[0].length < 5) {
+	    for (int square = 0; square < board.length * board[0].length; square ++) {
+		if (solveH(square / board.length, square % board.length, 1)) {
+		    break; // workaround, break statement only works for 1 loop, not a nested pair
+		}
+	    }
+	}
+	else {
+	    for (int square = 0; square < board.length * board[0].length; square ++) {
+		if (otherSolveH(square / board.length, square % board.length, 1)) {
+		    break; // workaround, break statement only works for 1 loop, not a nested pair
+		}
 	    }
 	}
     }
@@ -210,20 +219,14 @@ public class KnightBoard {
     }
 
     public static void main(String[] args) {
-	KnightBoard Penn = new KnightBoard(40, 40);
-	Penn.solve();
-	System.out.println(Penn);
-	/* for (int i = 1; i < 10; i ++) {
-	    for (int j = 1; j < 10; j ++) { // starting from 1 or 2 never works
-		Penn = new KnightBoard(i, j);
-		Penn.solve();
-		System.out.println("" + i + "x" + j);
-		System.out.println(Penn.otherToString());
-		System.out.println("----------");
-		System.out.println(Penn);
-		System.out.println("--------------------");
-	    }
-	    }*/ 
+	KnightBoard Penn;
+	for (int i = 3; i < 60; i ++) {
+	    Penn = new KnightBoard(i, i);
+	    Penn.solve();
+	    System.out.println("" + i + "x" + i);
+	    System.out.println(Penn);
+	    System.out.println("--------------------");
+	}
     }
 }
 
