@@ -34,11 +34,11 @@ public class KnightBoard {
 		}
 		else {
 		    moves[r][c] = 8;
-		    }
+		}
 	    }
 	}
     }
-
+    
     public void solve() {
 	if (board.length < 5 || board[0].length < 5) {
 	    for (int square = 0; square < board.length * board[0].length; square ++) {
@@ -219,14 +219,17 @@ public class KnightBoard {
     }
 
     public static void main(String[] args) {
-	KnightBoard Penn;
-	for (int i = 3; i < 60; i ++) {
+	KnightBoard Penn = new KnightBoard(49, 49);
+	Penn.solve();
+	System.out.println(Penn);
+	/*for (int i = 3; i < 60; i ++) {
 	    Penn = new KnightBoard(i, i);
 	    Penn.solve();
 	    System.out.println("" + i + "x" + i);
 	    System.out.println(Penn);
 	    System.out.println("--------------------");
-	}
+	    }*/
+	
     }
 }
 
