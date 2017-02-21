@@ -1,8 +1,8 @@
 import java.util.Arrays;
 public class KnightBoard {
     private int[][] board, moves;
-    private static int[] rowShift = {-2, -2, -1, -1,  1,  1,  2,  2};
-    private static int[] colShift = {-1,  1,  -2, 2, -2,  2, -1,  1};
+    private static int[] rowShift = {-2, -1,  1, -1,  2,  1,  2, -2};
+    private static int[] colShift = { 1,  2,  2, -2, -1, -2,  1, -1};
     
     public KnightBoard(int startingRows, int startingCols) {
 	if (startingRows <= 0 || startingCols <= 0) {
@@ -40,7 +40,7 @@ public class KnightBoard {
 	}
     }
     
-    public void solve() {
+    public void solveFast() {
 	if (board.length < 5 || board[0].length < 5) {
 	    for (int square = 0; square < board.length * board[0].length; square ++) {
 		if (solveH(square / board.length, square % board.length, 1)) {
@@ -85,12 +85,6 @@ public class KnightBoard {
 	if (level == board.length * board[0].length) {
 	    return true;
 	}
-	if (level > 48 * 49 + 40) {
-	    System.out.println("Level " + level);
-	    System.out.println("Row " + row + ", Col " + col);
-	    System.out.println(toString());
-	    System.exit(0);
-	}
 	int[] priority = sortMoves(row, col);
 	for (int i = 0; i < priority.length; i ++) {
 	    if (otherSolveH(row + rowShift[priority[i] % 10],
@@ -100,11 +94,6 @@ public class KnightBoard {
 	    }
 	}
 	removeKnight(row, col);
-	System.out.println("Level " + level);
-	System.out.println("Row " + row + ", Col " + col);
-	System.out.println(toString());
-	System.exit(0);
-	System.exit(0);
 	return false;
     }
 
@@ -197,13 +186,13 @@ public class KnightBoard {
         for (int row = 0; row < board.length; row ++) {
 	    for (int col = 0; col < board[row].length; col ++) {
 		if (board[row][col] < 10) {
-		    s += "  " + board[row][col] + " ";
+		    s += "   " + board[row][col] + " ";
 		}
 		else if (board[row][col] < 100) {
-		    s += " " + board[row][col] + " ";
+		    s += "  " + board[row][col] + " ";
 		}
 		else if (board[row][col] < 1000) {
-		    s += "" + board[row][col] + " ";
+		    s += " " + board[row][col] + " ";
 		}
 		else s += board[row][col] + " ";
 	    }
@@ -229,16 +218,13 @@ public class KnightBoard {
     }
 
     public static void main(String[] args) {
-	KnightBoard Penn = new KnightBoard(49, 49);
-	Penn.solve();
-	System.out.println(Penn);
-	/*for (int i = 3; i < 60; i ++) {
-	    Penn = new KnightBoard(i, i);
-	    Penn.solve();
+	for (int i = 3; i < 100; i ++) {
+	    KnightBoard Penn = new KnightBoard(i, i);
+	    Penn.solveFast();
 	    System.out.println("" + i + "x" + i);
 	    System.out.println(Penn);
 	    System.out.println("--------------------");
-	    }*/
+	}
 	
     }
 }
