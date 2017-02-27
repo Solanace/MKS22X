@@ -180,9 +180,9 @@ public class KnightBoard {
     
     public String toString() {
 	String s = "";
-	/*if (board[0][0] == 0) { // no solution
+	if (board[0][0] == 0) { // no solution
 	    return s;
-	    }*/
+	}
         for (int row = 0; row < board.length; row ++) {
 	    for (int col = 0; col < board[row].length; col ++) {
 		if (board[row][col] < 10) {
@@ -218,13 +218,16 @@ public class KnightBoard {
     }
 
     public static void main(String[] args) {
-	for (int i = 3; i < 100; i ++) {
+	int loop = 100;
+	if (args.length > 0 && Integer.parseInt(args[0]) > 3) {
+	    loop = Integer.parseInt(args[0]);
+	}
+	for (int i = 3; i <= loop; i ++) {
 	    KnightBoard Penn = new KnightBoard(i, i);
-	    Penn.solveFast();
 	    System.out.println("" + i + "x" + i);
+	    Penn.solveFast();
 	    System.out.println(Penn);
 	    System.out.println("--------------------");
 	}
-	
     }
 }
