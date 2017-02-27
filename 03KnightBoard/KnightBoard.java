@@ -1,5 +1,5 @@
 public class KnightBoard {
-    private int[][] board, moves;
+    private int[][] board;
     private static int[] rowShift = {-2, -2, -1, -1,  1,  1,  2,  2};
     private static int[] colShift = {-1,  1,  -2, 2, -2,  2, -1,  1};
     
