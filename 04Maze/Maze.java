@@ -7,20 +7,65 @@ public class Maze {
 
     public Maze(String fileName) {
 	Scanner sc;
+	int countNewlines = 0, countS = 0, countE = 0;
+	String file = "";
 	try {
 	    sc = new Scanner(new File(fileName));
-	    String blah;
-	    while (sc.hasNext()) {
-		blah = sc.next();
-		System.out.println(blah);
+	    while (sc.hasNextLine()) {
+		file += sc.nextLine() + "\n";
+		countNewlines += 1;
+		//System.out.println(file);
 	    }
-	} catch (FileNotFoundException e) {
-	    System.out.println(e);
 	}
-	//To be filled in
+	catch (FileNotFoundException e) {
+	    System.out.println(e);
+	    System.exit(0);
+	}
+	file = file.substring(0, file.length() - 1);
+	//System.out.println(file);
+	//System.out.println(count);
+	maze = new char[file.indexOf("\n")][countNewlines];
+	//System.out.println(maze.length);
+	//System.out.println(maze[0].length);
+
+	for (int row = 0; row < maze.length; row ++) {
+	    for (int col = 0; col < maze[row].length; col ++) {
+		char c = file.charAt(row * maze[row].length + col + row);
+		if (c == 'S') {
+		    countS += 1;
+		    if (countS > 1) {
+			throw new IllegalArgumentException("File has multiple starting points!");
+		    }
+		}
+		if (c == 'E') {
+		    countE += 1;
+		    if (countE > 1) {
+			throw new IllegalArgumentException("File has multiple ending points!");
+		    }
+		}
+		maze[row][col] = c; // extra row accounts for newlines
+		System.out.print(maze[row][col]);
+	    }
+	    System.out.println();
+	}
+
+	if (countS == 0) {
+	    throw new IllegalArgumentException("File does not have a starting point!");
+	}
+	if (countE == 0) {
+	    throw new IllegalArgumentException("File does not have an ending point!");
+	}
     }
 
-    /*public void setAnimate(boolean b) {
+    private void wait(int millis){ //ADDED SORRY!
+         try {
+             Thread.sleep(millis);
+         }
+         catch (InterruptedException e) {
+         }
+     }
+
+    public void setAnimate(boolean b) {
 	animate = b;
     }
 
@@ -28,7 +73,7 @@ public class Maze {
 	System.out.println("\033[2J\033[1;1H");
     }
 
-    public boolean solve() {
+    /*public boolean solve() {
 	//initialize startRow and startCol at the S
         maze[startRow][startCol] = ' ';
 	return solve(startRow, startCol);
@@ -51,6 +96,6 @@ public class Maze {
         /*Penn.setAnimate(true);
 	  Penn.solve();*/
 
-        System.out.println(Penn);
+        //System.out.println(Penn);
     }
 }
