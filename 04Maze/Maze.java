@@ -4,6 +4,8 @@ public class Maze {
     private char[][] maze;
     private boolean animate;
     private int startRow, startCol;
+    private int[] rowShift = {-1,  0,  1,  0};
+    private int[] colShift = { 0,  1,  0, -1};
 
     public Maze(String fileName) {
 	Scanner sc;
@@ -23,15 +25,19 @@ public class Maze {
 	}
 	file = file.substring(0, file.length() - 1);
 	//System.out.println(file);
-	//System.out.println(count);
-	maze = new char[file.indexOf("\n")][countNewlines];
+	//System.out.println(file.length());
+	//System.out.println(countNewlines);
+	maze = new char[countNewlines][file.indexOf("\n")];
 	//System.out.println(maze.length);
 	//System.out.println(maze[0].length);
 
 	for (int row = 0; row < maze.length; row ++) {
 	    for (int col = 0; col < maze[row].length; col ++) {
+		//System.out.println("Row " + row + ", Col " + col);
 		char c = file.charAt(row * maze[row].length + col + row);
 		if (c == 'S') {
+		    startRow = row;
+		    startCol = col;
 		    countS += 1;
 		    if (countS > 1) {
 			throw new IllegalArgumentException("File has multiple starting points!");
@@ -43,10 +49,10 @@ public class Maze {
 			throw new IllegalArgumentException("File has multiple ending points!");
 		    }
 		}
-		maze[row][col] = c; // extra row accounts for newlines
-		System.out.print(maze[row][col]);
+		maze[row][col] = c;
+		//System.out.print(maze[row][col]);
 	    }
-	    System.out.println();
+	    //System.out.println();
 	}
 
 	if (countS == 0) {
@@ -57,7 +63,7 @@ public class Maze {
 	}
     }
 
-    private void wait(int millis){ //ADDED SORRY!
+    private void wait(int millis){
          try {
              Thread.sleep(millis);
          }
@@ -73,29 +79,73 @@ public class Maze {
 	System.out.println("\033[2J\033[1;1H");
     }
 
-    /*public boolean solve() {
+    public boolean solve() {
 	//initialize startRow and startCol at the S
         maze[startRow][startCol] = ' ';
 	return solve(startRow, startCol);
     }
 
     private boolean solve(int row, int col) {
-	if (animate) {
-	    System.out.println("\033[2J\033[1;1H"+this);
-            wait(20);
-        }
+	//System.out.println("Row " + row + ", Col " + col);
+	if (row + 1 > maze.length || row - 1 < 0 || col + 1 > maze[0].length || col - 1 < 0) {
+	    return false;
+	}
 
-	// Solve thingy
+	if (maze[row][col] == '@' || maze[row][col] == '.' || maze[row][col] == '#') {
+	    return false;
+	}
+	
+	if (animate) {
+	    System.out.println("\033[2J\033[1;1H" + this);
+            wait(20);
+	}
+	
+	if (maze[row][col] == 'E') {
+	    return true;
+	}
+
+	maze[row][col] = '@';
+	for (int i = 0; i < 4; i ++) {
+	    if (solve(row + rowShift[i], col + colShift[i])) {
+		return true;
+	    }
+	}
+	maze[row][col] = '.';
+
+	if (animate) {
+	    System.out.println("\033[2J\033[1;1H" + this);
+            wait(10);
+	}
 
 	return false;
-	}*/
+    }
+
+    public String toString() {
+	String s = "";
+	for (int row = 0; row < maze.length; row ++) {
+	    for (int col = 0; col < maze[row].length; col ++) {
+		if (maze[row][col] != '\n') {
+		    s = s + maze[row][col];
+		}
+	    }
+	    s += "\n";
+	}
+	return s;
+    }
 
     public static void main(String[] args) {
-	Maze Penn = new Maze("data1.dat");//true animates the maze.
-        
-        /*Penn.setAnimate(true);
-	  Penn.solve();*/
-
-        //System.out.println(Penn);
+	if (args.length < 1) {
+	    System.out.println("Welcome to the maze solver! Please specify the following parameters for your maze:\nfilename [animate]\ne.g., data3.dat animate");
+	}
+	else {
+	    Maze Penn = new Maze(args[0]);
+	    if (args.length > 1) {
+		Penn.setAnimate(args[1].equals("animate"));
+	    }
+	    else {
+		Penn.setAnimate(false);
+	    }
+	    Penn.solve();
+	}
     }
 }
