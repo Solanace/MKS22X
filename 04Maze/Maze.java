@@ -32,7 +32,7 @@ public class Maze {
 	    System.out.println(e);
 	    System.exit(0);
 	}
-	file = file.substring(0, file.length() - 1);
+	//file = file.substring(0, file.length() - 1);
 	//System.out.println(file);
 	//System.out.println(file.length());
 	//System.out.println(countNewlines);
@@ -85,12 +85,10 @@ public class Maze {
     }
 
     public void clearTerminal() {
-	System.out.println("\033[2J\033[1;1H");
+	System.out.print("\033[2J\033[1;1H");
     }
 
     public boolean solve() {
-	//initialize startRow and startCol at the S
-        maze[startRow][startCol] = ' ';
 	return solve(startRow, startCol);
     }
 
@@ -100,26 +98,26 @@ public class Maze {
 	    return false;
 	}
 
-	if (maze[row][col] == '*' || maze[row][col] == '.' || maze[row][col] == '#') {
+	if (maze[row][col] == '@' || maze[row][col] == '.' || maze[row][col] == '#') {
 	    return false;
 	}
 	
 	if (animate) {
 	    System.out.println("\033[2J\033[1;1H" + this);
-            wait(30);
+            wait(20);
 	}
 	
 	if (maze[row][col] == 'E') {
 	    return true;
 	}
 
-	maze[row][col] = '*';
+	maze[row][col] = '@';
 	for (int i = 0; i < 4; i ++) {
 	    if (solve(row + rowShift[i], col + colShift[i])) {
 		return true;
 	    }
 	}
-	maze[row][col] = 'x';
+	maze[row][col] = '.';
 
 	if (animate) {
 	    System.out.println("\033[2J\033[1;1H" + this);
@@ -133,15 +131,13 @@ public class Maze {
 	String s = "";
 	for (int row = 0; row < maze.length; row ++) {
 	    for (int col = 0; col < maze[row].length; col ++) {
-		if (maze[row][col] == '#') {
-		    s += '█';
-		}
-		else if (maze[row][col] == 'x') {
-		    s += ANSI_RED + 'x' + ANSI_RESET;
-		}
-		else {
-		    s += maze[row][col];
-		}
+		//if (maze[row][col] == '#') {
+		//    s += '█';
+		//}
+		//else if (maze[row][col] == 'x') {
+		//    s += ANSI_RED + 'x' + ANSI_RESET;
+		//}
+		s += maze[row][col];
 	    }
 	    s += "\n";
 	}
@@ -150,7 +146,7 @@ public class Maze {
 
     public static void main(String[] args) {
 	if (args.length < 1) {
-	    System.out.println("Welcome to the maze solver! Please specify the following parameters for your maze:\nfilename [animate]\ne.g., data3.dat animate");
+	    System.out.println("Welcome to the maze solver! Please specify the following parameters for your maze:\nfilename [animate]\ne.g., java Maze data3.dat animate");
 	}
 	else {
 	    Maze Penn = new Maze(args[0]);
@@ -161,6 +157,8 @@ public class Maze {
 		Penn.setAnimate(false);
 	    }
 	    Penn.solve();
+	    Penn.clearTerminal();
+	    System.out.println(Penn);
 	}
     }
 }
