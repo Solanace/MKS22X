@@ -6,6 +6,15 @@ public class Maze {
     private int startRow, startCol;
     private int[] rowShift = {-1,  0,  1,  0};
     private int[] colShift = { 0,  1,  0, -1};
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_BLACK = "\u001B[30m";
+    public static final String ANSI_RED = "\u001B[31m";
+    public static final String ANSI_GREEN = "\u001B[32m";
+    public static final String ANSI_YELLOW = "\u001B[33m";
+    public static final String ANSI_BLUE = "\u001B[34m";
+    public static final String ANSI_PURPLE = "\u001B[35m";
+    public static final String ANSI_CYAN = "\u001B[36m";
+    public static final String ANSI_WHITE = "\u001B[37m";
 
     public Maze(String fileName) {
 	Scanner sc;
@@ -23,7 +32,7 @@ public class Maze {
 	    System.out.println(e);
 	    System.exit(0);
 	}
-	file = file.substring(0, file.length() - 1);
+	//file = file.substring(0, file.length() - 1);
 	//System.out.println(file);
 	//System.out.println(file.length());
 	//System.out.println(countNewlines);
@@ -76,12 +85,10 @@ public class Maze {
     }
 
     public void clearTerminal() {
-	System.out.println("\033[2J\033[1;1H");
+	System.out.print("\033[2J\033[1;1H");
     }
 
     public boolean solve() {
-	//initialize startRow and startCol at the S
-        maze[startRow][startCol] = ' ';
 	return solve(startRow, startCol);
     }
 
@@ -114,7 +121,7 @@ public class Maze {
 
 	if (animate) {
 	    System.out.println("\033[2J\033[1;1H" + this);
-            wait(10);
+            wait(20);
 	}
 
 	return false;
@@ -124,9 +131,13 @@ public class Maze {
 	String s = "";
 	for (int row = 0; row < maze.length; row ++) {
 	    for (int col = 0; col < maze[row].length; col ++) {
-		if (maze[row][col] != '\n') {
-		    s = s + maze[row][col];
-		}
+		//if (maze[row][col] == '#') {
+		//    s += '█';
+		//}
+		//else if (maze[row][col] == 'x') {
+		//    s += ANSI_RED + 'x' + ANSI_RESET;
+		//}
+		s += maze[row][col];
 	    }
 	    s += "\n";
 	}
@@ -135,7 +146,7 @@ public class Maze {
 
     public static void main(String[] args) {
 	if (args.length < 1) {
-	    System.out.println("Welcome to the maze solver! Please specify the following parameters for your maze:\nfilename [animate]\ne.g., data3.dat animate");
+	    System.out.println("Welcome to the maze solver! Please specify the following parameters for your maze:\nfilename [animate]\ne.g., java Maze data3.dat animate");
 	}
 	else {
 	    Maze Penn = new Maze(args[0]);
@@ -146,6 +157,8 @@ public class Maze {
 		Penn.setAnimate(false);
 	    }
 	    Penn.solve();
+	    Penn.clearTerminal();
+	    System.out.println(Penn);
 	}
     }
 }
