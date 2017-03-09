@@ -139,14 +139,23 @@ public class USACO {
 	for (int r = 0; r < ROWS; r ++) {
 	    if (sc.hasNextLine()) {
 		s = sc.nextLine();
-		//System.out.println(s);
+		//System.out.println(s.length());
 		String[] pastureRow = s.split("");
+		//for (int i = 0; i < pastureRow.length; i ++) {
+		//    System.out.print(pastureRow[i] + ", ");
+		//}
+		//System.out.println(pastureRow.length);
 		if (pastureRow.length == COLS) {
 		    for (int c = 0; c < COLS; c ++) {
 			pastureMap[r][c] = pastureRow[c].charAt(0);
 		    }
 		}
-		else throw new IllegalArgumentException("Pasture map not formatted correctly!");
+		else if (pastureRow.length - 1 == COLS) {
+		    for (int c = 0; c < COLS; c ++) {
+			pastureMap[r][c] = pastureRow[c + 1].charAt(0);
+		    }
+		}
+		//else throw new IllegalArgumentException("Pasture map not formatted correctly!");
 	    }
 	    else throw new IllegalArgumentException("Pasture map not formatted correctly!");
 	}
