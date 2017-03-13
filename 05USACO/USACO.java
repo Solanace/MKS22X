@@ -178,7 +178,10 @@ public class USACO {
 	}
 	else throw new IllegalArgumentException("Last row not formatted correctly!");
 	//System.out.println("" + START_ROW + " " + START_COL + " " + END_ROW + " " + END_COL);
-	return silverH(START_ROW, START_COL, END_ROW, END_COL, TIME, pastureMap);
+	//return silverH(START_ROW, START_COL, END_ROW, END_COL, TIME, pastureMap);
+	int[][] moves = new int[ROWS][COLS];
+	moves[START_ROW][START_COL] = 1;
+	return betterSilverH(END_ROW, END_COL, TIME, pastureMap, moves, new int[ROWS][COLS], 'a');
     }
 
     private static int silverH(int r, int c, int endR, int endC, int time, char[][] pastureMap) {
@@ -196,6 +199,66 @@ public class USACO {
 		 silverH(r, c + 1, endR, endC, time - 1, pastureMap) +
 		 silverH(r, c - 1, endR, endC, time - 1, pastureMap);
     }
+
+    private static int betterSilverH(int endR, int endC, int time, char[][] pastureMap, int[][] a, int[][] b, char copyFrom) {
+	/*for (int r = 0; r < a.length; r ++) {
+	    for (int c = 0; c < a[r].length; c ++) {
+		if (copyFrom == 'a') {
+		    System.out.print(a[r][c]);
+		}
+		else System.out.print(b[r][c]);
+	    }
+	    System.out.println();
+	    }
+	    System.out.println("------");*/
+	if (time == 0) {
+	    return a[endR][endC] + b[endR][endC];
+	}
+	
+	int[] rowShift = {-1,  0,  1,  0};
+	int[] colShift = { 0,  1,  0, -1};
+	
+	if (copyFrom == 'a') {
+	    for (int r = 0; r < b.length; r ++) {
+		for (int c = 0; c < b[r].length; c ++) {
+		    for (int i = 0; i < 4; i ++) {
+			if (isOnBoard(r + rowShift[i], c + colShift[i], pastureMap)) {
+			    b[r][c] += a[r + rowShift[i]][c + colShift[i]];
+			}
+		    }
+		}
+	    }
+	    for (int r = 0; r < a.length; r ++) {
+		for (int c = 0; c < a[r].length; c ++) {
+		    a[r][c] = 0;
+		}
+	    }
+	    return betterSilverH(endR, endC, time - 1, pastureMap, a, b, 'b');
+	}
+	else {
+	    for (int r = 0; r < a.length; r ++) {
+		for (int c = 0; c < a[r].length; c ++) {
+		    for (int i = 0; i < 4; i ++) {
+		        if (isOnBoard(r + rowShift[i], c + colShift[i], pastureMap)) {
+			    a[r][c] += b[r + rowShift[i]][c + colShift[i]];
+			}
+		    }
+		}
+	    }
+	    for (int r = 0; r < b.length; r ++) {
+		for (int c = 0; c < b[r].length; c ++) {
+		    b[r][c] = 0;
+		}
+	    }
+	    return betterSilverH(endR, endC, time - 1, pastureMap, a, b, 'a');
+	}
+    }
+
+    private static boolean isOnBoard(int r, int c, char[][] pastureMap) {
+	//System.out.println("Row " + r + ", Col " + c + " ");
+	return r < pastureMap.length && r > -1 && c < pastureMap[r].length && c > -1 && pastureMap[r][c] != '*';
+    }
+			
 		 
 
     public static void main(String[] args) {
