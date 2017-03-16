@@ -1,5 +1,5 @@
 import java.util.Arrays;
-public class QuickSelect {
+public class Quickselect {
     /*public static int part(int[] data, int start, int end) {
 	System.out.print('{');
 	for (int i = 0; i < data.length; i ++) {
@@ -75,31 +75,31 @@ public class QuickSelect {
 	int pivotIndex = (int)(Math.random() * (end - start + 1) + start);
 	int pivot = nums[pivotIndex];
 
-	//System.out.println("Pivoting around " + pivot + ", " + pivotIndex);
+	System.out.println("Pivoting around " + pivot + ", " + pivotIndex);
 
 	int temp = nums[start];
 	nums[start] = nums[pivotIndex];
 	nums[pivotIndex] = temp;
 	pivotIndex = start;
 
-	/*System.out.print('{');
+	System.out.print('{');
 	for (int i = 0; i < nums.length; i ++) {
 	    System.out.print(nums[i] + ", ");
 	}
-	System.out.println('}');*/
+	System.out.println('}');
 
-	//System.out.println("Pivoting around " + pivot + ", " + pivotIndex);
+	System.out.println("Pivoting around " + pivot + ", " + pivotIndex);
 
 	int pass = 0;
 	int left = start;
 	int right = end;
 	while (left < right) {
-	    //System.out.println("Pass " + pass + ", left = " + left + ", right = " + right);
-	    /*System.out.print('{');
+	    System.out.println("Pass " + pass + ", left = " + left + ", right = " + right);
+	    System.out.print('{');
 	    for (int i = 0; i < nums.length; i ++) {
 		System.out.print(nums[i] + ", ");
 	    }
-	    System.out.println('}');*/
+	    System.out.println('}');
 	    while (left < right && nums[left] < pivot) {
 		left ++;
 	    }
@@ -114,7 +114,7 @@ public class QuickSelect {
 		if (nums[left] == nums[right]) {
 		    left ++;
 		}
-		else if (pivotIndex == left) {
+		/*else if (pivotIndex == left) {
 		    //System.out.println(pivotIndex + " == " + left);
 		    pivotIndex = right;
 		    left = start;
@@ -130,26 +130,27 @@ public class QuickSelect {
 		    //System.out.println(pivotIndex + " != " + left + " != " + right);
 		    left ++;
 		    right --;
-		}
+		    }*/
 		pass ++;
 	    }
 	}
-	/*System.out.print('{');
+	System.out.print('{');
 	for (int i = 0; i < nums.length; i ++) {
 	    System.out.print(nums[i] + ", ");
 	}
-	System.out.println('}');*/
+	System.out.println('}');
 	pivotIndex = right;
-	//System.out.println("Ending with " + nums[left] + " at " + left + " and " + nums[right] + " at " + right);
-	//System.out.println("PivotIndex: " + pivotIndex);
+	System.out.println("Ending with " + nums[left] + " at " + left + " and " + nums[right] + " at " + right);
+	System.out.println("PivotIndex: " + pivotIndex);
 	return right;
     }
     
     public static void main(String[] args) {
 	int[] blah = {3, 12, 2, 3, 7, 89, -1, 23, 67, 3, 3, 3, 1, -5, 7, 3, -2, 7, 86, 4};
 	int[] unsorted = {6, 5, 3, 1, 8, 7, 2, 4};
-	int[] a = {999,999,999,4,1,0,3,2,999,999,999};
-	System.out.println(quickselect(a, Integer.parseInt(args[0])));
+	int[] a = {999,999,999,4,1,0,3,2,999,999,999,5,3,3,3,3};
+	System.out.println(part(a, 0, a.length - 1));
+	//System.out.println(quickselect(a, 1));
 	Arrays.sort(a);
 	int[] sort = a;
 	System.out.print('{');
