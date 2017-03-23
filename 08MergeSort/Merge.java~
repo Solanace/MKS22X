@@ -1,0 +1,65 @@
+import java.util.Arrays;
+public class Merge {
+    public static void mergesort(int[] ary) {
+	if (ary.length < 2) {
+	    return;
+	}
+	
+	int[] left = new int[ary.length / 2];
+	int[] right = new int[ary.length - left.length];
+	
+	int count = 0;
+	for (int i = 0; i < left.length; i ++) {
+	    left[i] = ary[i];
+	    count ++;
+	}
+	for (int i = 0; i < right.length; i ++) {
+	    right[i] = ary[count + i];
+	}
+	
+	mergesort(left);
+	mergesort(right);
+	
+	int l = 0, r = 0, i = 0;
+	while (l < left.length && r < right.length) {
+	    if (left[l] < right[r]) {
+		ary[i] = left[l];
+		i ++;
+		l ++;
+	    }
+	    else {
+		ary[i] = right[r];
+		i ++;
+		r ++;
+	    }
+	}
+	while (l < left.length) {
+	    ary[i] = left[l];
+	    i ++;
+	    l ++;
+	}
+	while (r < right.length) {
+	    ary[i] = right[r];
+	    i ++;
+	    r ++;
+	}
+    }
+
+    public static void display(int[] args) {
+	System.out.print("{");
+	for (int i = 0; i < args.length - 1; i ++) {
+	    System.out.print(args[i] + ", ");
+	}
+	System.out.println(args[args.length - 1] + "}");
+    }
+
+    public static void main(String[] args) {
+	int[] P = {4, 6, 2, 3, 9, 7, 8, 1, 5, 0};
+	int[] W = {-2, -4, -6, -8, 10, 10, 10, 3, -7};
+	mergesort(W);
+	display(W);
+	Arrays.sort(W);
+        display(W);
+    }
+}
+	
