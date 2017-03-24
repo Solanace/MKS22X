@@ -45,6 +45,7 @@ public class Quick {
     public static int quickselectH(int[] nums, int k, int start, int end) {
         int left = -1, middle = -1, right = nums.length, pivotIndex = -1;
 	while (pivotIndex != k) {
+	    System.out.println("Left: " + left + ", Right: " + right);
 	    pivotIndex = (int)(Math.random() * (end - start + 1) + start);
 	    int pivot = nums[pivotIndex];
 	    swap(nums, start, pivotIndex);
@@ -115,32 +116,32 @@ public class Quick {
 	data[b] = data[a];
 	data[a] = temp;
     }
+
+    public static int[] randomArray(int size) {
+	int[] ary = new int[size];
+	for (int i = 0; i < ary.length; i ++) {
+	    ary[i] = (int)(Math.random() * ary.length - ary.length / 2);
+	}
+	return ary;
+    }
     
     public static void main(String[] args) {
-	int[] u = new int[5000];
-	for (int i = 0; i < u.length; i ++) {
-	    u[i] = (int)(Math.random() * 901 - 100);
-	    u[i] = 0;
-	}
+	int[] a = randomArray(2000000);
 
 	// quicksort
-	quicksort(u);
-	System.out.print("{");
-	for (int i = 0; i < u.length; i ++) {
-	    System.out.print(u[i] + ", ");
+	quicksort(a);
+        String test = Arrays.toString(a);
+        Arrays.sort(a);
+	String correct = Arrays.toString(a);
+	if (test.equals(correct)) {
+	    System.out.println("Quicksort works!");
 	}
-	System.out.println("}");
-        Arrays.sort(u);
-	System.out.print("{");
-	for (int i = 0; i < u.length; i ++) {
-	    System.out.print(u[i] + ", ");
-	}
-	System.out.println("}");
+	else System.out.println("Quicksort failed!");
 
 	// quickselect
-	int r = (int)(Math.random() * u.length);
-	System.out.println(quickselect(u, r));
-	Arrays.sort(u);
-	System.out.println(u[r]);
+	int r = (int)(Math.random() * a.length);
+	System.out.println(quickselect(a, r));
+	Arrays.sort(a);
+	System.out.println(a[r]);
     }
 }
