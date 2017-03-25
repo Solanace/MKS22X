@@ -43,21 +43,22 @@ public class Quick {
     }
     
     public static int quickselectH(int[] nums, int k, int start, int end) {
-        int left = -1, middle = -1, right = nums.length, pivotIndex = -1;
-	while (pivotIndex != k) {
-	    System.out.println("Left: " + left + ", Right: " + right);
-	    pivotIndex = (int)(Math.random() * (end - start + 1) + start);
+	if (k <= end && k >= start) {
+	    return nums[k];
+	}
+	else {
+	    int pivotIndex = (int)(Math.random() * (end - start + 1) + start);
 	    int pivot = nums[pivotIndex];
 	    swap(nums, start, pivotIndex);
-	    
+	
 	    pivotIndex = start;
-	    left = start + 1;
-	    middle = start + 1;
-	    right = end;
+	    int left = start + 1;
+	    int middle = start + 1;
+	    int right = end;
 	    while (middle <= right) {
 		if (nums[middle] < pivot) {
 		    if (left != middle) {
-		    swap(nums, left, middle);
+			swap(nums, left, middle);
 		    }
 		    left ++;
 		    middle ++;
@@ -70,14 +71,14 @@ public class Quick {
 		    right --;
 		}
 	    }
-	    
+
 	    pivotIndex = left - 1;
 	    swap(nums, start, pivotIndex);
-	    if (k <= right && k >= left) {
-		return nums[pivotIndex];
+	    if (k > right) {
+		return quickselectH(nums, k, right, end);
 	    }
+	    else return quickselectH(nums, k, start, left);
 	}
-	return nums[pivotIndex];
     }
 
     public static int part(int[] nums, int start, int end) {
@@ -124,24 +125,149 @@ public class Quick {
 	}
 	return ary;
     }
+
+    public static int[] randomArray(int size, int min, int max) {
+	int[] ary = new int[size];
+	for (int i = 0; i < ary.length; i ++) {
+	    ary[i] = (int)(Math.random() * (max - min + 1) + min);
+	}
+	return ary;
+    }
     
     public static void main(String[] args) {
 	int[] a = randomArray(2000000);
-
+	System.out.println("Completely random array");
+	System.out.println("--------------------");
 	// quicksort
 	quicksort(a);
         String test = Arrays.toString(a);
         Arrays.sort(a);
 	String correct = Arrays.toString(a);
 	if (test.equals(correct)) {
-	    System.out.println("Quicksort works!");
+	    System.out.println("Quicksort.....works!");
 	}
-	else System.out.println("Quicksort failed!");
-
+	else {
+	    System.out.println("Quicksort.....failed!");
+	}
 	// quickselect
 	int r = (int)(Math.random() * a.length);
-	System.out.println(quickselect(a, r));
+        int select = quickselect(a, r);
 	Arrays.sort(a);
-	System.out.println(a[r]);
+        if (select == a[r]) {
+	    System.out.println("Quickselect...works!");
+	}
+	else {
+	    System.out.println("Quickselect...failed!");
+	}
+	System.out.println();
+
+	a = randomArray(2000000, 0, 10);
+	System.out.println("Random array with limited range");
+	System.out.println("--------------------");
+	// quicksort
+	quicksort(a);
+        test = Arrays.toString(a);
+        Arrays.sort(a);
+	correct = Arrays.toString(a);
+	if (test.equals(correct)) {
+	    System.out.println("Quicksort.....works!");
+	}
+	else {
+	    System.out.println("Quicksort.....failed!");
+	}
+	// quickselect
+	r = (int)(Math.random() * a.length);
+        select = quickselect(a, r);
+	Arrays.sort(a);
+        if (select == a[r]) {
+	    System.out.println("Quickselect...works!");
+	}
+	else {
+	    System.out.println("Quickselect...failed!");
+	}
+	System.out.println();
+
+	a = randomArray(2000000, 50, 50);
+	System.out.println("Array with all of 1 number");
+	System.out.println("--------------------");
+	// quicksort
+	quicksort(a);
+        test = Arrays.toString(a);
+        Arrays.sort(a);
+	correct = Arrays.toString(a);
+	if (test.equals(correct)) {
+	    System.out.println("Quicksort.....works!");
+	}
+	else {
+	    System.out.println("Quicksort.....failed!");
+	}
+	// quickselect
+	r = (int)(Math.random() * a.length);
+        select = quickselect(a, r);
+	Arrays.sort(a);
+        if (select == a[r]) {
+	    System.out.println("Quickselect...works!");
+	}
+	else {
+	    System.out.println("Quickselect...failed!");
+	}
+	System.out.println();
+
+	a = randomArray(2000000);
+	Arrays.sort(a);
+	System.out.println("Sorted array");
+	System.out.println("--------------------");
+	// quicksort
+	quicksort(a);
+        test = Arrays.toString(a);
+        Arrays.sort(a);
+	correct = Arrays.toString(a);
+	if (test.equals(correct)) {
+	    System.out.println("Quicksort.....works!");
+	}
+	else {
+	    System.out.println("Quicksort.....failed!");
+	}
+	// quickselect
+	r = (int)(Math.random() * a.length);
+        select = quickselect(a, r);
+	Arrays.sort(a);
+        if (select == a[r]) {
+	    System.out.println("Quickselect...works!");
+	}
+	else {
+	    System.out.println("Quickselect...failed!");
+	}
+	System.out.println();
+
+	int[] b = randomArray(2000000);
+	Arrays.sort(b);
+	for (int i = b.length - 1; i > -1; i --) {
+	    a[b.length - 1 - i] = b[i];
+	}
+	System.out.println("Reverse sorted array");
+	System.out.println("--------------------");
+	// quicksort
+	quicksort(a);
+        test = Arrays.toString(a);
+        Arrays.sort(a);
+	correct = Arrays.toString(a);
+	if (test.equals(correct)) {
+	    System.out.println("Quicksort.....works!");
+	}
+	else {
+	    System.out.println("Quicksort.....failed!");
+	}
+	// quickselect
+	r = (int)(Math.random() * a.length);
+        select = quickselect(a, r);
+	Arrays.sort(a);
+        if (select == a[r]) {
+	    System.out.println("Quickselect...works!");
+	}
+	else {
+	    System.out.println("Quickselect...failed!");
+	}
+	System.out.println();
     }
 }

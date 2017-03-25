@@ -54,20 +54,107 @@ public class Merge {
 	return s;
     }
 
-    public static void main(String[] args) {
-	int[] P = {4, 6, 2, 3, 9, 7, 8, 1, 5, 0};
-	int[] W = {-2, -4, -6, -8, 10, 10, 10, 3, -7};
-	int[] u = new int[(int)(Math.random() * 1001)];
-	for (int i = 0; i < u.length; i ++) {
-	    u[i] = (int)(Math.random() * 1001 - 500);
+    public static int[] randomArray(int size) {
+	int[] ary = new int[size];
+	for (int i = 0; i < ary.length; i ++) {
+	    ary[i] = (int)(Math.random() * ary.length - ary.length / 2);
 	}
-	mergesort(u);
-	String test = display(u);
-	Arrays.sort(u);
-	String correct = display(u);
-        System.out.println(test);
-	System.out.println(correct);
-	System.out.println(test.equals(correct));
+	return ary;
+    }
+
+    public static int[] randomArray(int size, int min, int max) {
+	int[] ary = new int[size];
+	for (int i = 0; i < ary.length; i ++) {
+	    ary[i] = (int)(Math.random() * (max - min + 1) + min);
+	}
+	return ary;
+    }
+
+    public static void main(String[] args) {
+        int[] a = randomArray(2000000);
+	System.out.println("Completely random array");
+	System.out.println("--------------------");
+	// mergesort
+	mergesort(a);
+        String test = Arrays.toString(a);
+        Arrays.sort(a);
+	String correct = Arrays.toString(a);
+	if (test.equals(correct)) {
+	    System.out.println("Mergesort.....works!");
+	}
+	else {
+	    System.out.println("Mergesort.....failed!");
+	}
+	System.out.println();
+
+	a = randomArray(2000000, 0, 10);
+	System.out.println("Random array with limited range");
+	System.out.println("--------------------");
+        // mergesort
+	mergesort(a);
+        test = Arrays.toString(a);
+        Arrays.sort(a);
+	correct = Arrays.toString(a);
+	if (test.equals(correct)) {
+	    System.out.println("Mergesort.....works!");
+	}
+	else {
+	    System.out.println("Mergesort.....failed!");
+	}
+	System.out.println();
+
+	a = randomArray(2000000, 50, 50);
+	System.out.println("Array with all of 1 number");
+	System.out.println("--------------------");
+        // mergesort
+	mergesort(a);
+        test = Arrays.toString(a);
+        Arrays.sort(a);
+	correct = Arrays.toString(a);
+	if (test.equals(correct)) {
+	    System.out.println("Mergesort.....works!");
+	}
+	else {
+	    System.out.println("Mergesort.....failed!");
+	}
+	System.out.println();
+
+	a = randomArray(2000000);
+	Arrays.sort(a);
+	System.out.println("Sorted array");
+	System.out.println("--------------------");
+        // mergesort
+	mergesort(a);
+        test = Arrays.toString(a);
+        Arrays.sort(a);
+	correct = Arrays.toString(a);
+	if (test.equals(correct)) {
+	    System.out.println("Mergesort.....works!");
+	}
+	else {
+	    System.out.println("Mergesort.....failed!");
+	}
+	System.out.println();
+
+	int[] b = randomArray(2000000);
+	Arrays.sort(b);
+	for (int i = b.length - 1; i > -1; i --) {
+	    a[b.length - 1 - i] = b[i];
+	}
+	System.out.println("Reverse sorted array");
+	System.out.println("--------------------");
+        // mergesort
+	mergesort(a);
+        test = Arrays.toString(a);
+        Arrays.sort(a);
+	correct = Arrays.toString(a);
+	if (test.equals(correct)) {
+	    System.out.println("Mergesort.....works!");
+	}
+	else {
+	    System.out.println("Mergesort.....failed!");
+	}
+	System.out.println();
     }
 }
 	
