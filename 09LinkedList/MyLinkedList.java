@@ -130,29 +130,50 @@ public class MyLinkedList {
 	return s;
     }
 
+    public static int[] randomArray(int size) {
+	int[] ary = new int[size];
+	for (int i = 0; i < ary.length; i ++) {
+	    ary[i] = (int)(Math.random() * ary.length - ary.length / 2);
+	}
+	return ary;
+    }
+
     public static void main(String[] args) {
 	MyLinkedList Penn = new MyLinkedList();
-	Penn.add(-1);
-	System.out.println(Penn);
-	System.out.println(Penn.remove(0));
-	for (int i = 0; i < 10; i ++) {
-	    int rand = (int)(Math.random() * 10);
-	    System.out.print("Adding " + rand + ": ");
-	    System.out.println(Penn.add(rand));
+	int[] a = randomArray(5);
+	for (int i = 0; i < a.length; i ++) {
 	    System.out.println(Penn);
+	    System.out.println("Adding " + a[i]);
+	    Penn.add(a[i]);
 	    if (i % 2 == 0) {
-		System.out.print("Removing index 0: ");
-		System.out.println(Penn.remove(0));
 		System.out.println(Penn);
+		int remove = (int)(Math.random() * Penn.size());
+		System.out.println("Removing " + Penn.remove(remove) + " at " + remove);
 	    }
 	}
-	Penn.add(5, -1);
 	System.out.println(Penn);
-	for (int i = 0; i < Penn.size(); i ++) {
-	    int rand = (int)(Math.random() * 10);
-	    System.out.println("Setting " + Penn.get(i) + " to " + rand);
-	    System.out.println(Penn.set(i, rand));
+	System.out.println("Finished adding to the back");
+	a = randomArray(10);
+	for (int i = 0; i < a.length; i ++) {
 	    System.out.println(Penn);
+	    int add = (int)(Math.random() * Penn.size());
+	    System.out.println("Adding " + a[i] + " at " + add + ", replacing " + Penn.get(add));
+	    Penn.add(add, a[i]);
+	}
+	System.out.println(Penn);
+	System.out.println("Finished adding randomly");
+	a = randomArray(10);
+	for (int i = 0; i < a.length; i ++) {
+	    System.out.println(Penn);
+	    int replace = (int)(Math.random() * Penn.size());
+	    System.out.println("Replacing " + Penn.get(replace) + " at " + replace + " with " + a[i]);
+	    Penn.set(replace, a[i]);
+	}
+	System.out.println(Penn);
+
+	a = randomArray(10);
+	for (int i = 0; i < a.length; i ++) {
+	    System.out.println(a[i] + " is located at " + Penn.indexOf(a[i]));
 	}
     }
 }
