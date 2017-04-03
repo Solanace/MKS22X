@@ -31,11 +31,26 @@ public class MyLinkedList {
     }
 
     private LNode getNode(int index) {
-	LNode x = start;
+	/*LNode x = start;
         for (int i = 0; i < index; i ++) {
 	    x = x.next;
 	}
-	return x;
+	return x;*/
+	LNode x;
+	if (index < size / 2) {
+	    x = start;
+	    for (int i = 0; i < index; i ++) {
+		x = x.next;
+	    }
+	    return x;
+	}
+	else {
+	    x = end;
+	    for (int i = size - 1; i > index; i --) {
+		x = x.prev;
+	    }
+	    return x;
+	}
     }
 
     public boolean add(int value) {
