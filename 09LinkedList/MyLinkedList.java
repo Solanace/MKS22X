@@ -1,10 +1,10 @@
 public class MyLinkedList {
-    private LNode start;
+    private LNode start, end;
     private int size;
     
     private class LNode {
 	private int data;
-	private LNode next;
+	private LNode next, prev;
 
 	private LNode(int data) {
 	    this.data = data;
@@ -13,6 +13,12 @@ public class MyLinkedList {
 	private LNode(int data, LNode next) {
 	    this.data = data;
 	    this.next = next;
+	}
+
+	private LNode(int data, LNode next, LNode prev) {
+	    this.data = data;
+	    this.next = next;
+	    this.prev = prev;
 	}
     }
 
@@ -24,18 +30,24 @@ public class MyLinkedList {
 	return size;
     }
 
+    private LNode getNode(int index) {
+	LNode x = start;
+        for (int i = 0; i < index; i ++) {
+	    x = x.next;
+	}
+	return x;
+    }
+
     public boolean add(int value) {
-        if (start == null) {
+        if (size == 0) {
 	    start = new LNode(value);
+	    end = start;
 	    size ++;
 	    return true;
 	}
 	else {
-	    LNode current = start;
-	    while (current.next != null) {
-		current = current.next;
-	    }
-	    current.next = new LNode(value);
+	    end.next = new LNode(value, null, end);
+	    end = end.next;
 	    size ++;
 	    return true;
 	}
@@ -45,63 +57,73 @@ public class MyLinkedList {
 	if (index < 0 || index > size) {
 	    throw new IndexOutOfBoundsException("Attempted to add to an invalid index!");
 	}
-	if (size == 0) {
-	    start = new LNode(value);
+	if (index == size) {
+	    add(value);
+	}
+	else if (index == 0) {
+	    start.prev = new LNode(value, start);
+	    start = start.prev;
 	    size ++;
-	    return;
 	}
-	LNode current = start;
-	for (int i = 0; i < index - 1; i ++) {
-	    current = current.next;
+	else {
+	    LNode b = getNode(index);
+	    LNode a = b.prev;
+	    LNode x = new LNode(value, b, a);
+	    a.next = x;
+	    b.prev = x;
+	    size ++;
 	}
-	LNode nodeAtIndex = current.next;
-        LNode insert = new LNode(value, nodeAtIndex);
-	current.next = insert;
-	size ++;
     }
 
     public int remove(int index) {
 	if (index < 0 || index >= size) {
 	    throw new IndexOutOfBoundsException("Attempted to remove an invalid index!");
 	}
-	if (index == 0) {
-	    int ret = start.data;
-	    start = start.next;
+	LNode b = getNode(index);
+        int data = b.data;
+	remove(b);
+	return data;
+    }
+
+    private void remove(LNode b) {
+	if (size == 1) {
+	    start = null;
+	    end = null;
 	    size --;
-	    return ret;
 	}
-	LNode current = start;
-	for (int i = 0; i < index - 1; i ++) {
-	    current = current.next;
+	else if (b == start) {
+	    start = start.next;
+	    start.prev = null;
+	    size --;
 	}
-	LNode nodeAtIndex = current.next;
-        int removed = nodeAtIndex.data;
-	current.next = current.next.next;
-	size --;
-	return removed;
+	else if (b == end) {
+	    end = end.prev;
+	    end.next = null;
+	    size --;
+	}
+	else {
+	    LNode a = b.prev;
+	    LNode c = b.next;
+	    a.next = c;
+	    c.prev = a;
+	    size --;
+	}
     }
 
     public int get(int index) {
 	if (index < 0 || index >= size) {
 	    throw new IndexOutOfBoundsException("Attempted to set an invalid index!");
 	}
-	LNode currentNode = start;
-	for (int i = 0; i < index; i ++) {
-	    currentNode = currentNode.next;
-	}
-	return currentNode.data;
+        return getNode(index).data;
     }
 
     public int set(int index, int newValue) {
 	if (index < 0 || index >= size) {
 	    throw new IndexOutOfBoundsException("Attempted to get an invalid index!");
 	}
-	LNode currentNode = start;
-	for (int i = 0; i < index; i ++) {
-	    currentNode = currentNode.next;
-	}
-	int oldValue = currentNode.data;
-	currentNode.data = newValue;
+	LNode x = getNode(index);
+	int oldValue = x.data;
+	x.data = newValue;
 	return oldValue;
     }
 
@@ -170,6 +192,7 @@ public class MyLinkedList {
 	    Penn.set(replace, a[i]);
 	}
 	System.out.println(Penn);
+	System.out.println(Penn.size());
 
 	a = randomArray(10);
 	for (int i = 0; i < a.length; i ++) {
