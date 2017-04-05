@@ -1,4 +1,6 @@
-public class MyLinkedList {
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+public class MyLinkedList implements Iterable<Integer> {
     private LNode head, tail;
     private int size;
     
@@ -20,6 +22,43 @@ public class MyLinkedList {
 	    this.next = next;
 	    this.prev = prev;
 	}
+    }
+
+    public class LIterator implements Iterator<Integer> {
+	private int index;
+	private LNode current;
+
+	public LIterator() {
+	    index = 0;
+	    this.current = MyLinkedList.this.head;
+	}
+
+	public LIterator(MyLinkedList a) {
+	    index = 0;
+	    this.current = a.head;
+	}
+
+	public boolean hasNext() {
+	    return index < MyLinkedList.this.size;
+	}
+
+	public Integer next() {
+	    if (hasNext()) {
+		int ret = current.data;
+		index ++;
+		current = current.next;
+		return ret;
+	    }
+	    throw new NoSuchElementException();
+	}
+
+	public void remove() {
+	    throw new UnsupportedOperationException();
+	}
+    }
+
+    public Iterator<Integer> iterator() {
+	return new LIterator();
     }
 
     public MyLinkedList() {
@@ -213,5 +252,16 @@ public class MyLinkedList {
 	for (int i = 0; i < a.length; i ++) {
 	    System.out.println(a[i] + " is located at " + Penn.indexOf(a[i]));
 	}
+	System.out.print("[");
+	for (Integer i : Penn) {
+	    System.out.print(i + ", ");
+	}
+	System.out.println("]");
+	Iterator<Integer> it = Penn.iterator();
+	System.out.print("[");
+	while (it.hasNext()) {
+	    System.out.print(it.next() + ", ");
+	}
+	System.out.println("]");
     }
 }
