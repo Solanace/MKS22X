@@ -1,0 +1,5 @@
+import java.util.LinkedList;
+import java.util.NoSuchElementException;
+public class Deque {
+    private int front, back;
+    
