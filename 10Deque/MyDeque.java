@@ -66,7 +66,7 @@ public class MyDeque {
 	    count ++;
 	}
 	front = 0;
-	back = count - 1;
+	back = count;
 	arr = newArr;
     }
 
