@@ -1,4 +1,0 @@
-import java.util.Stack<Double>;
-public class Postfix {
-    public static double eval(String s) {
-	String[] arr = s.split(" ");
