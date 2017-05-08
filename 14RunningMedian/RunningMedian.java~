@@ -1,0 +1,8 @@
+public class RunningMedian {
+    private MyHeap min, max;
+    private int median;
+
+    public RunningMedian() {
+	min = new MyHeap(false);
+	max = new MyHeap(true);
+    }
