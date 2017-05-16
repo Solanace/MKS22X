@@ -20,6 +20,7 @@ public class MazeSolver {
 	else if (style == 1) f = new FrontierQueue();
 	else if (style == 2) f = new FrontierStack(); // wat
 	else f = new FrontierPriorityQueue();
+	f.add(m.start);
     }
     public static void main(String[] args) {
     }
