@@ -30,7 +30,7 @@ public class Location implements Comparable<Location> {
     }
 
     public static void main(String[] args) {
-	Location Penn = new Location(3, 3, null, 2, 15, true);
+	Location Penn = new Location(3, 3, null, 2, 15);
 	Location Nnep = new Location(3, 3, null, 13, 53);
 	System.out.println(Penn.compareTo(Nnep));
 	System.out.println(Nnep.compareTo(Penn));
