@@ -1,6 +1,13 @@
 import java.util.*;
 import java.io.*;
 public class MazeSolver {
+    /*
+      '@' means correct route
+      '#' means a wall
+      '?' means frontier
+      '.' means already covered path
+      ' ' means unexplorerd path
+    */
     private Maze m;
     private Frontier f;
     public MazeSolver(String filename) {
@@ -14,6 +21,14 @@ public class MazeSolver {
     public void solve(int style) {
 	if (style == 0) {
 	    f = new FrontierStack();
+	    f.add(m.getStart());
+	    m.set(m.getStart().getRow(), m.getStart().getCol(), '.');
+	    while(m.get(f.next().getRow(), f.next().getCol()) != 'E') {
+		Location[] paths = getPaths(f.next(), style);
+		for (int i = 0; i < paths.length; i ++) {
+		    f.add(paths[i]);
+		}
+	    }
 	}
 	else if (style == 1) {
 	    f = new FrontierQueue();
@@ -24,11 +39,61 @@ public class MazeSolver {
 	else {
 	    f = new FrontierPriorityQueue();
 	}
-	f.add(maze.getStart());
     }
 
-    public void solveHelper() {
+    public Location[] getPaths(Location l, int style) {
+        int r = l.getRow();
+	int c = l.getCol();
+	int count = 0;
+	if (isValid(r + 1, c)) count ++;
+	if (isValid(r - 1, c)) count ++;
+	if (isValid(r, c + 1)) count ++;
+	if (isValid(r, c - 1)) count ++;
+	Location[] paths = new Location[count];
+	int pos = 0;
+	if (isValid(r + 1, c)) {
+	    if (style == 3) {
+		paths[pos] = new Location(r + 1, c, l, l.getStart(), l.getGoal(), true);
+	    }
+	    else {
+		paths[pos] = new Location(r + 1, c, l, l.getStart(), l.getGoal(), false);
+	    }
+	    pos ++;
+	}
+	if (isValid(r - 1, c)) {
+	    if (style == 3) {
+		paths[pos] = new Location(r - 1, c, l, l.getStart(), l.getGoal(), true);
+	    }
+	    else {
+		paths[pos] = new Location(r - 1, c, l, l.getStart(), l.getGoal(), false);
+	    }
+	    pos ++;
+	}
+	if (isValid(r, c + 1)) {
+	    if (style == 3) {
+		paths[pos] = new Location(r, c + 1, l, l.getStart(), l.getGoal(), true);
+	    }
+	    else {
+		paths[pos] = new Location(r, c + 1, l, l.getStart(), l.getGoal(), false);
+	    }
+	    pos ++;
+	}
+	if (isValid(r, c - 1)) {
+	    if (style == 3) {
+		paths[pos] = new Location(r, c - 1, l, l.getStart(), l.getGoal(), true);
+	    }
+	    else {
+		paths[pos] = new Location(r, c - 1, l, l.getStart(), l.getGoal(), false);
+	    }
+	    pos ++;
+	}
+	return paths;
     }
+
+    private boolean isValid(int r, int c) {
+	return m.get(r, c) == ' ';
+    }
+	    
 
     public String toString() {
 	return m.toString();
@@ -69,19 +134,19 @@ class Location implements Comparable<Location> {
 	}
     }
 
-    public int row() {
+    public int getRow() {
 	return row;
     }
 
-    public int col() {
+    public int getCol() {
 	return col;
     }
 
-    public int distToStart() {
+    public int getStart() {
 	return distToStart;
     }
 
-    public int distToGoal() {
+    public int getGoal() {
 	return distToGoal;
     }
 }
@@ -104,7 +169,7 @@ class FrontierStack implements Frontier {
     }
 
     public Location next() {
-	return s.pop();
+	return s.peek();
     }
 
     public int size() {
@@ -113,10 +178,10 @@ class FrontierStack implements Frontier {
 }
 
 class FrontierQueue implements Frontier {
-    private ArrayDeque<Location> q;
+    private LinkedList<Location>  q;
     
     public FrontierQueue() {
-	q = new ArrayDeque<Location>();
+	q = new LinkedList<Location>();
     }
 
     public void add(Location l) {
@@ -124,7 +189,7 @@ class FrontierQueue implements Frontier {
     }
 
     public Location next() {
-	return q.remove();
+	return q.get(0);
     }
 
     public int size() {
@@ -209,15 +274,11 @@ class FrontierPriorityQueue implements Frontier {
     }
 
     public Location next() {
-	if (arr.size() == 2) {
-	    return arr.remove(arr.size() - 1);
+        if (arr.size() == 1) {
+	    return null;
 	}
 	else {
-	    Location top = arr.get(1);
-	    Location bottom = arr.remove(arr.size() - 1);
-	    arr.set(1, bottom);
-	    pushDown(1);
-	    return top;
+	    return arr.get(1);
 	}
     }
 
