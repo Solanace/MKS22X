@@ -22,13 +22,26 @@ public class MazeSolver {
 	if (style == 0) {
 	    f = new FrontierStack();
 	    f.add(m.getStart());
-	    m.set(m.getStart().getRow(), m.getStart().getCol(), '.');
-	    while(m.get(f.next().getRow(), f.next().getCol()) != 'E') {
-		Location[] paths = getPaths(f.next(), style);
+	    Location current = f.next();
+	    while(current.getRow() != m.getEnd().getRow() || current.getCol() != m.getEnd().getCol()) {
+		System.out.println(m.toString(100));
+		m.set(current.getRow(), current.getCol(), '.');
+		Location[] paths = getPaths(current, style);
 		for (int i = 0; i < paths.length; i ++) {
 		    f.add(paths[i]);
+		    m.set(paths[i].getRow(), paths[i].getCol(), '?');
 		}
+		current = f.next();
 	    }
+	    System.out.println(current.getRow() + ", " + current.getCol());
+	    System.out.println(m.getEnd().getRow() + ", " + m.getEnd().getCol());
+	    m.set(current.getRow(), current.getCol(), '@');
+	    while (current.getPrevious() != null) {
+		current = current.getPrevious();
+		m.set(current.getRow(), current.getCol(), '@');
+	    }
+	    m.set(current.getRow(), current.getCol(), '@');
+	    System.out.println(current.getRow() + ", " + current.getCol());
 	}
 	else if (style == 1) {
 	    f = new FrontierQueue();
@@ -91,7 +104,7 @@ public class MazeSolver {
     }
 
     private boolean isValid(int r, int c) {
-	return m.get(r, c) == ' ';
+	return m.get(r, c) == ' ' || m.get(r, c) == 'E';
     }
 	    
 
@@ -100,6 +113,8 @@ public class MazeSolver {
     }
     
     public static void main(String[] args) {
+	MazeSolver Penn = new MazeSolver(args[0]);
+	Penn.solve(0);
     }
 }
 
@@ -149,6 +164,10 @@ class Location implements Comparable<Location> {
     public int getGoal() {
 	return distToGoal;
     }
+
+    public Location getPrevious() {
+	return prev;
+    }
 }
 
 interface Frontier {
@@ -169,7 +188,7 @@ class FrontierStack implements Frontier {
     }
 
     public Location next() {
-	return s.peek();
+	return s.pop();
     }
 
     public int size() {
@@ -189,7 +208,7 @@ class FrontierQueue implements Frontier {
     }
 
     public Location next() {
-	return q.get(0);
+	return q.remove(0);
     }
 
     public int size() {
@@ -274,11 +293,21 @@ class FrontierPriorityQueue implements Frontier {
     }
 
     public Location next() {
-        if (arr.size() == 1) {
-	    return null;
+        /*if (arr.size() == 1) {
+	  return null;
+	  }
+	  else {
+	  return arr.get(1);
+	  }*/
+	if (arr.size() == 2) {
+	    return arr.remove(arr.size() - 1);
 	}
 	else {
-	    return arr.get(1);
+	    Location top = arr.get(1);
+	    Location bottom = arr.remove(arr.size() - 1);
+	    arr.set(1, bottom);
+	    pushDown(1);
+	    return top;
 	}
     }
 
@@ -347,7 +376,6 @@ class Maze {
 		}
 
 		if(maze[r][c]=='E'){
-		    maze[r][c]=' ';
 		    if(endr == -1){
 			endr=r;
 			endc=c;
