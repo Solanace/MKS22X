@@ -10,8 +10,10 @@ public class MazeSolver {
     */
     private Maze m;
     private Frontier f;
-    public MazeSolver(String filename) {
+    private boolean animate;
+    public MazeSolver(String filename, boolean animate) {
         m = new Maze(filename);
+	this.animate = animate;
     }
 	
     public void solve() {
@@ -39,7 +41,9 @@ public class MazeSolver {
 	    //System.out.println(current.getRow() + ", " + current.getCol());
 	    //System.out.println(current.priority());
 	    //System.out.println(current.getStart());
-	    System.out.println(m.toString(50));
+	    if (animate) {
+		System.out.println(m.toString(50));
+	    }
 	    m.set(current.getRow(), current.getCol(), '.');
 	    Location[] paths = getPaths(current, style);
 	    for (int i = 0; i < paths.length; i ++) {
@@ -95,8 +99,18 @@ public class MazeSolver {
     }
     
     public static void main(String[] args) {
-	MazeSolver Penn = new MazeSolver(args[0]);
-	Penn.solve(Integer.parseInt(args[1]));
+	if (args.length < 2) {
+	    System.out.println("Please format like so: java MazeSolver [filename] [method] [animate]");
+	    System.out.println("For example: java MazeSolver data5.txt 2 animate");
+	}
+	else if (args.length == 2) {
+	    MazeSolver Penn = new MazeSolver(args[0], false);
+	    Penn.solve(Integer.parseInt(args[1]));
+	}
+	else {
+	    MazeSolver Penn = new MazeSolver(args[0], args[2].equals("animate"));
+	    Penn.solve(Integer.parseInt(args[1]));
+	}
     }
 }
 
