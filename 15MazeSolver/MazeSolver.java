@@ -21,27 +21,6 @@ public class MazeSolver {
     public void solve(int style) {
 	if (style == 0) {
 	    f = new FrontierStack();
-	    f.add(m.getStart());
-	    Location current = f.next();
-	    while(current.getRow() != m.getEnd().getRow() || current.getCol() != m.getEnd().getCol()) {
-		System.out.println(m.toString(100));
-		m.set(current.getRow(), current.getCol(), '.');
-		Location[] paths = getPaths(current, style);
-		for (int i = 0; i < paths.length; i ++) {
-		    f.add(paths[i]);
-		    m.set(paths[i].getRow(), paths[i].getCol(), '?');
-		}
-		current = f.next();
-	    }
-	    System.out.println(current.getRow() + ", " + current.getCol());
-	    System.out.println(m.getEnd().getRow() + ", " + m.getEnd().getCol());
-	    m.set(current.getRow(), current.getCol(), '@');
-	    while (current.getPrevious() != null) {
-		current = current.getPrevious();
-		m.set(current.getRow(), current.getCol(), '@');
-	    }
-	    m.set(current.getRow(), current.getCol(), '@');
-	    System.out.println(current.getRow() + ", " + current.getCol());
 	}
 	else if (style == 1) {
 	    f = new FrontierQueue();
@@ -49,58 +28,61 @@ public class MazeSolver {
 	else if (style == 2) {
 	    f = new FrontierPriorityQueue(); // aStar is false
 	}
-	else {
+	else if (style == 3) {
 	    f = new FrontierPriorityQueue();
 	}
+	f.add(m.getStart());
+	Location current = f.next();
+	while(current.getRow() != m.getEnd().getRow() || current.getCol() != m.getEnd().getCol()) {
+	    // Debugging
+	    //System.out.println(current.getAStar());
+	    //System.out.println(current.getRow() + ", " + current.getCol());
+	    //System.out.println(current.priority());
+	    //System.out.println(current.getStart());
+	    System.out.println(m.toString(50));
+	    m.set(current.getRow(), current.getCol(), '.');
+	    Location[] paths = getPaths(current, style);
+	    for (int i = 0; i < paths.length; i ++) {
+		f.add(paths[i]);
+		m.set(paths[i].getRow(), paths[i].getCol(), '?');
+	    }
+	    current = f.next();
+	}
+	m.set(current.getRow(), current.getCol(), 'E');
+	while (current.getPrevious() != null) {
+	    current = current.getPrevious();
+	    m.set(current.getRow(), current.getCol(), '@');
+	}
+	System.out.println(m.toString(50));
     }
 
     public Location[] getPaths(Location l, int style) {
+	int[] rShift = {1, -1, 0, 0};
+	int[] cShift = {0, 0, 1, -1};
         int r = l.getRow();
 	int c = l.getCol();
 	int count = 0;
-	if (isValid(r + 1, c)) count ++;
-	if (isValid(r - 1, c)) count ++;
-	if (isValid(r, c + 1)) count ++;
-	if (isValid(r, c - 1)) count ++;
+	for (int i = 0; i < 4; i ++) {
+	    if (isValid(r + rShift[i], c + cShift[i])) count ++;
+	}
 	Location[] paths = new Location[count];
 	int pos = 0;
-	if (isValid(r + 1, c)) {
-	    if (style == 3) {
-		paths[pos] = new Location(r + 1, c, l, l.getStart(), l.getGoal(), true);
+	for (int i = 0; i < 4; i ++) {
+	    if (isValid(r + rShift[i], c + cShift[i])) {
+		if (style == 3) {
+		    paths[pos] = new Location(r + rShift[i], c + cShift[i], l, l.getStart() + 1, getManhattanDist(r + rShift[i], c + cShift[i]), true);
+		}
+		else {
+		    paths[pos] = new Location(r + rShift[i], c + cShift[i], l, l.getStart() + 1, getManhattanDist(r + rShift[i], c + cShift[i]), false);
+		}
+		pos ++;
 	    }
-	    else {
-		paths[pos] = new Location(r + 1, c, l, l.getStart(), l.getGoal(), false);
-	    }
-	    pos ++;
-	}
-	if (isValid(r - 1, c)) {
-	    if (style == 3) {
-		paths[pos] = new Location(r - 1, c, l, l.getStart(), l.getGoal(), true);
-	    }
-	    else {
-		paths[pos] = new Location(r - 1, c, l, l.getStart(), l.getGoal(), false);
-	    }
-	    pos ++;
-	}
-	if (isValid(r, c + 1)) {
-	    if (style == 3) {
-		paths[pos] = new Location(r, c + 1, l, l.getStart(), l.getGoal(), true);
-	    }
-	    else {
-		paths[pos] = new Location(r, c + 1, l, l.getStart(), l.getGoal(), false);
-	    }
-	    pos ++;
-	}
-	if (isValid(r, c - 1)) {
-	    if (style == 3) {
-		paths[pos] = new Location(r, c - 1, l, l.getStart(), l.getGoal(), true);
-	    }
-	    else {
-		paths[pos] = new Location(r, c - 1, l, l.getStart(), l.getGoal(), false);
-	    }
-	    pos ++;
 	}
 	return paths;
+    }
+
+    public int getManhattanDist(int r, int c) {
+	return Math.abs(m.getEnd().getRow() - r) + Math.abs(m.getEnd().getCol() - c);
     }
 
     private boolean isValid(int r, int c) {
@@ -114,7 +96,7 @@ public class MazeSolver {
     
     public static void main(String[] args) {
 	MazeSolver Penn = new MazeSolver(args[0]);
-	Penn.solve(0);
+	Penn.solve(Integer.parseInt(args[1]));
     }
 }
 
@@ -149,6 +131,10 @@ class Location implements Comparable<Location> {
 	}
     }
 
+    public boolean getAStar() {
+	return aStar;
+    }
+
     public int getRow() {
 	return row;
     }
@@ -167,6 +153,11 @@ class Location implements Comparable<Location> {
 
     public Location getPrevious() {
 	return prev;
+    }
+
+    public int priority() {
+	if (aStar) return distToStart + distToGoal;
+	else return distToGoal;
     }
 }
 
@@ -223,7 +214,7 @@ class FrontierPriorityQueue implements Frontier {
     public FrontierPriorityQueue() {
 	arr = new ArrayList<Location>();
 	arr.add(null); // size 0 should not be used
-	maxOrMin = 1;
+	maxOrMin = -1;
     }
 
     public FrontierPriorityQueue(boolean isMaxHeap) {
