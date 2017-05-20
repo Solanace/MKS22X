@@ -6,7 +6,7 @@ public class MazeSolver {
       '#' means a wall
       '?' means frontier
       '.' means already covered path
-      ' ' means unexplorerd path
+      ' ' means unexplored path
     */
     private Maze m;
     private Frontier f;
@@ -231,11 +231,6 @@ class FrontierPriorityQueue implements Frontier {
 	maxOrMin = -1;
     }
 
-    public FrontierPriorityQueue(boolean isMaxHeap) {
-	this();
-	if (!isMaxHeap) maxOrMin = -1;
-    }
-
     private int left(int n) {
 	return n * 2;
     }
@@ -298,12 +293,6 @@ class FrontierPriorityQueue implements Frontier {
     }
 
     public Location next() {
-        /*if (arr.size() == 1) {
-	  return null;
-	  }
-	  else {
-	  return arr.get(1);
-	  }*/
 	if (arr.size() == 2) {
 	    return arr.remove(arr.size() - 1);
 	}
