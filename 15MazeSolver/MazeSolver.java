@@ -57,7 +57,7 @@ public class MazeSolver {
 	    current = current.getPrevious();
 	    m.set(current.getRow(), current.getCol(), '@');
 	}
-	System.out.println(m.toString(50));
+	System.out.println(m.toString());
     }
 
     public Location[] getPaths(Location l, int style) {
